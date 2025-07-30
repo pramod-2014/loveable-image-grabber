@@ -1,0 +1,61 @@
+
+trigger:
+ branches:
+  include:
+    - main
+pool:
+ name: "Infra-Runners-pool"
+
+
+variables:
+  imageName: 
+  dockerHubNamespace: 'prmd77'     #  Replace with Docker Hub username
+  dockerHubPassword: $(DockerHubSecrets)         #  Secret in Library
+  dockerTag: 'latest'
+
+
+stages:
+#Stage 1 Build 
+- stage: build
+  displayName: "BuldStageOne"
+  jobs:
+    - job: "BuildJob"
+      displayName: "Install and Build"
+      steps:
+      - task: NodeTool@0
+        inputs:
+          versionSource: 'spec'
+          versionSpec: '18.x'
+        displayName: "installNodejs"
+      - script:
+          npm install
+          npm run build
+        displayName: "Install Dependencies and Install"
+
+        # STAGE 2: DOCKERIZE & PUSH
+
+- stage: Dockerize 
+  displayName: Docker Build and Push
+  dependsOn: build
+  jobs:
+    - job: DockerJob
+      displayName: Build Docker Image & Push to Docker Hub
+      steps:
+      - task: Docker@2
+        inputs:
+          containerRegistry: 'DockerHubConnection'
+          repository: 'prmd77'
+          command: 'buildAndPush'
+          Dockerfile: '**/Dockerfile'
+        displayName: 'Build and Push Docker Image'
+     
+
+
+        
+       
+
+
+
+  
+
+
