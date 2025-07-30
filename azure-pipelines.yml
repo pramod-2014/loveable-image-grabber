@@ -1,12 +1,9 @@
-
 trigger:
- branches:
-  include:
-    - main
-pool:
- name: "Infra-Runners-pool"
- demands:
- - agent.name -equals 'myubuntuagent'
+  branches:
+    include:
+      - main
+
+pool: "Infra-Runners-pool"   # General pool for pipeline
 
 variables:
   imageName: 'loveable-image-grabber'
@@ -20,6 +17,10 @@ stages:
   jobs:
     - job: BuildJob
       displayName: "Install and Build"
+      pool:  # Specify agent with demand at job level
+        name: "Infra-Runners-pool"
+        demands:
+          - agent.name -equals myubuntuagent
       steps:
         - task: NodeTool@0
           inputs:
@@ -37,6 +38,10 @@ stages:
   jobs:
     - job: DockerJob
       displayName: "Build Docker Image & Push to Docker Hub"
+      pool:  # Again, specify agent with demand here too
+        name: "Infra-Runners-pool"
+        demands:
+          - agent.name -equals myubuntuagent
       steps:
         - task: Docker@2
           displayName: "Build and Push Docker Image"
@@ -47,15 +52,3 @@ stages:
             Dockerfile: '**/Dockerfile'
             tags: |
               $(dockerTag)
-
-     
-
-
-        
-       
-
-
-
-  
-
-
