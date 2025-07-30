@@ -5,6 +5,8 @@ trigger:
     - main
 pool:
  name: "Infra-Runners-pool"
+ demands:
+ - agent.name -equals 'aws'
 
 variables:
   imageName: 'loveable-image-grabber'
