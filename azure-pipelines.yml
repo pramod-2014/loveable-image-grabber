@@ -6,48 +6,46 @@ trigger:
 pool:
  name: "Infra-Runners-pool"
 
-
 variables:
-  imageName: 
-  dockerHubNamespace: 'prmd77'     #  Replace with Docker Hub username
-  dockerHubPassword: $(DockerHubSecrets)         #  Secret in Library
+  imageName: 'loveable-image-grabber'
+  dockerHubNamespace: 'prmd77'
+  dockerHubPassword: $(DockerHubSecrets)
   dockerTag: 'latest'
 
-
 stages:
-#Stage 1 Build 
 - stage: build
-  displayName: "BuldStageOne"
+  displayName: "Build Stage One"
   jobs:
-    - job: "BuildJob"
+    - job: BuildJob
       displayName: "Install and Build"
       steps:
-      - task: NodeTool@0
-        inputs:
-          versionSource: 'spec'
-          versionSpec: '18.x'
-        displayName: "installNodejs"
-      - script:
-          npm install
-          npm run build
-        displayName: "Install Dependencies and Install"
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '18.x'
+          displayName: "Install Node.js"
 
-        # STAGE 2: DOCKERIZE & PUSH
+        - script: |
+            npm install
+            npm run build
+          displayName: "Install Dependencies and Build"
 
-- stage: Dockerize 
-  displayName: Docker Build and Push
+- stage: Dockerize
+  displayName: "Docker Build and Push"
   dependsOn: build
   jobs:
     - job: DockerJob
-      displayName: Build Docker Image & Push to Docker Hub
+      displayName: "Build Docker Image & Push to Docker Hub"
       steps:
-      - task: Docker@2
-        inputs:
-          containerRegistry: 'DockerHubConnection'
-          repository: 'prmd77'
-          command: 'buildAndPush'
-          Dockerfile: '**/Dockerfile'
-        displayName: 'Build and Push Docker Image'
+        - task: Docker@2
+          displayName: "Build and Push Docker Image"
+          inputs:
+            containerRegistry: 'DockerHubConnection'
+            repository: '$(dockerHubNamespace)/$(imageName)'
+            command: 'buildAndPush'
+            Dockerfile: '**/Dockerfile'
+            tags: |
+              $(dockerTag)
+
      
 
 
