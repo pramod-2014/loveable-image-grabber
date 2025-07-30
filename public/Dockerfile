@@ -3,15 +3,12 @@ FROM node:20 AS builder
 
 WORKDIR /app
 
-# Install Bun globally
-RUN npm install -g bun
-
 # Copy everything to container
 COPY . .
 
 # Install deps and build app
-RUN bun install
-RUN bun run build
+RUN npm install
+RUN npm run build
 
 # Stage 2: Serve the built files with Nginx
 FROM nginx:alpine
