@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loveable-deployment
+
+spec:
+  replicas: 2
+  selector:
+    matchlabels:
+      app: loveable-image-grabber
+  template:
+    metadata:
+      labels:
+        app: loveable-image-grabber
+    spec:
+      containers:
+        - name: loveable-container
+          image: prmd77/loveable-image-grabber:latest
+          ports:
+          - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+- name: loveable-image-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: loveable-image-grabber
+  ports: 
+  - port: 80
+    targetPort: 80
+
+
+
