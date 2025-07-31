@@ -50,5 +50,6 @@ stages:
             repository: '$(dockerHubNamespace)/$(imageName)'
             command: 'buildAndPush'
             Dockerfile: '**/Dockerfile'
+            buildContext: '$(Build.SourcesDirectory)'
             tags: |
               $(dockerTag)
