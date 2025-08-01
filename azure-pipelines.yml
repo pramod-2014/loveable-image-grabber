@@ -62,7 +62,7 @@ stages:
 
 - stage: DeployToAKS
   displayName: Deploy To AKS
-  dependsOn: Dockerize
+ 
   jobs:
     - job: Deploy
       displayName: Deploy To AKS
