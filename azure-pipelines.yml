@@ -1,6 +1,6 @@
 trigger: none
 
-pool: "Infra-Runners-pool"   # General pool for pipeline
+
 
 variables:
   imageName: 'loveable-image-grabber'
