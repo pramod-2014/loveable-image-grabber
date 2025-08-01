@@ -64,20 +64,18 @@ stages:
   displayName: Deploy To AKS
   dependsOn: Dockerize
   jobs:
-   - job: Deploy
-     displayName: Deploy To AKS
-     pool: 
-       name: "Infra-Runners-pool"
-       demanands:
-        - agent.name -equals kmster
-     
-     steps:
-       - task: KubernetesManifest@1
-         inputs:
-           action: 'deploy'
-           connectionType: 'kubernetesServiceConnection'
-           kubernetesServiceConnection: 'kube-service-connection'
-           namespace: 'default'
-           manifests: 'loveable-image-grabber/manifests/deployment.yaml'
-    
-
+    - job: Deploy
+      displayName: Deploy To AKS
+      pool: 
+        name: "Infra-Runners-pool"
+        demands:
+          - agent.name -equals kmaster
+      steps:
+        - task: KubernetesManifest@1
+          displayName: "Deploy manifest to AKS"
+          inputs:
+            action: 'deploy'
+            connectionType: 'kubernetesServiceConnection'
+            kubernetesServiceConnection: 'kube-service-connection'
+            namespace: 'default'
+            manifests: '$(System.DefaultWorkingDirectory)/manifests/deployment.yaml'
