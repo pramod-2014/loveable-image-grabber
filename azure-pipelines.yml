@@ -78,6 +78,6 @@ stages:
            connectionType: 'kubernetesServiceConnection'
            kubernetesServiceConnection: 'kube-service-connection'
            namespace: 'default'
-           manifests: '/manifests /deployment.yaml'
+           manifests: '/deployment.yaml'
     
 
