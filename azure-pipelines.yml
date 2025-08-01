@@ -78,6 +78,6 @@ stages:
            connectionType: 'kubernetesServiceConnection'
            kubernetesServiceConnection: 'kube-service-connection'
            namespace: 'default'
-           manifests: '$(System.DefaultWorkingDirectory)/loveable-image-grabber/manifests/deployment.yaml'
+           manifests: 'loveable-image-grabber/manifests/deployment.yaml'
     
 
