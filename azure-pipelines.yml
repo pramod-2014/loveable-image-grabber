@@ -16,6 +16,7 @@ stages:
 # STAGE 1: BUILD
 
 - stage: build
+  condition: and(succeeded(), eq(variables['runBuild'], 'false'))
   displayName: "Build Stage One"
   jobs:
     - job: BuildJob
@@ -38,6 +39,7 @@ stages:
 # STAGE 2: Dockerize and Push
 
 - stage: Dockerize
+  condition: and(succeeded(), eq(variables['runBuild'], 'false'))
   displayName: "Docker Build and Push"
   dependsOn: build
   jobs:
