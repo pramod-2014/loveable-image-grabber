@@ -1,6 +1,7 @@
-trigger: none
-
-
+trigger:
+ branches:
+   include:
+     - main
 
 variables:
   imageName: 'loveable-image-grabber'
@@ -18,7 +19,7 @@ stages:
   jobs:
     - job: BuildJob
       displayName: "Install and Build"
-      pool:  # Specify agent with demand at job level
+      pool: 
         name: "Infra-Runners-pool"
         demands:
           - agent.name -equals kmaster
@@ -42,7 +43,7 @@ stages:
   jobs:
     - job: DockerJob
       displayName: "Build Docker Image & Push to Docker Hub"
-      pool:  # Again, specify agent with demand here too
+      pool:  
         name: "Infra-Runners-pool"
         demands:
           - agent.name -equals kmaster
